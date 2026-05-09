@@ -28,7 +28,7 @@ Figure 1. Singly Linked List
 
 (2) head不指向NULL : 
 
-先將新節點儲存一個指向舊首節點的地址，之後斷開head和舊首節點的連接，改成指向新節點。
+先將新節點儲存一個指向舊首節點的地址(即圖中的100)，之後斷開head和舊首節點的連接，改成指向新節點。
 
 ![Linked List](images/figure3.png)
 
@@ -159,7 +159,7 @@ int main() {
 
 假設要刪掉第n個節點(圖中假設刪掉3號節點)，先找到n-1的節點位置，之後將其所存的n節點位址(即圖中的150)更新成n+1節點的位址(即圖中的250)，最後在釋放第n個節點。
 
-![Linked List](images\figure5.png)
+![Linked List](images/figure5.png)
 
 實作程式碼:(這裡Insert用的是尾插法)
 ```c
@@ -247,3 +247,115 @@ int main()
     return 0;
 }
 ```
+
+## Linked List 反轉操作
+這邊的反轉不是指將數據移動，如將下圖的5移動到2的位置，而是調整鏈的方向。這裡有兩種方法可以達成，分別是:Iterative(迭代)、Recursive(遞迴)。
+
+![Linked List](images/figure6.png)
+
+### 1. Iterative(迭代)
+在迭代中使用迴圈來遍歷列表，每當遇到節點時，我們可以調整該節點的連接方向，讓其指向上一個節點而非下一個。
+
+![Linked List](images/figure7.png)
+
+在反轉中，我們需要將節點指向上一個節點，但在鏈表中我們知道下一個節點的位置，但不知道上一個節點的位置，因此需要變量prev來跟蹤上一個節點的位置。
+
+![Linked List](images/figure8.png)
+
+但在反轉之後，我們就無法到達下一個節點(即上圖斷開連接)，因此需要變量next來跟蹤下一個節點的位置。
+
+![Linked List](images/figure9.png)
+反轉
+![Linked List](images/figure10.png)
+
+current把值給prev，之後移到下一節點
+![Linked List](images/figure11.png)
+
+next移到下一節點，並反轉
+![Linked List](images/figure12.png)
+
+最後結果
+![Linked List](images/figure13.png)
+
+實作程式碼:(這裡Insert用的是尾插法)
+```c
+//Linled List//
+//Reverse a linked list by iterativing//
+
+#include <stdlib.h>
+#include <stdio.h>
+
+typedef struct node
+{
+    int data;
+    struct node* next;
+}Node;
+Node* head; 
+
+void Insert(int data)
+{
+    Node* temp1 = (Node*)malloc(sizeof(Node));
+    Node* temp2 = head;
+    temp1->data = data;
+    temp1->next = NULL;
+    
+    if(temp2 == NULL)
+    {
+        head = temp1;
+        return;
+    }
+    
+    while(temp2->next != NULL)
+    {
+        temp2 = temp2->next;
+    }
+    temp2->next = temp1;
+}
+
+void Print()
+{
+    Node* temp = head;
+    while(temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+void Reverse()
+{
+    Node *prev, *current, *next;
+    prev = NULL;
+    current = head;
+
+    while(current != NULL)
+    {
+        next = current->next;
+        current->next = prev;
+
+        prev = current;
+        current = next;
+    }
+    head = prev;
+}
+
+int main()
+{
+    head = NULL;
+    Insert(2);
+    Insert(4);
+    Insert(5);
+    Insert(8); //2, 4, 5, 8
+    printf("Linked list is ");
+    Print();
+    
+    Reverse();
+    printf("Reverse linked list is ");
+    Print();
+    
+    return 0;
+}
+```
+
+### 2. Recursive(遞迴)
