@@ -359,3 +359,82 @@ int main()
 ```
 
 ### 2. Recursive(遞迴)
+假設有一個Linked List:
+![Linked List](images/figure14.png)
+
+這裡我們設計一個Reverse_Print，他輸入的是節點的地址。當節點的地址不等於NULL時，他會一直呼叫自己;當節點的地址等於NULL時，則return。return後會回到上一次呼叫的地方並執行下一行程式碼(這邊是輸出當下節點的data)，執行完後就會在return到上一次呼叫的地方。
+
+![Linked List](images/figure15.png)
+![Linked List](images/figure16.png)
+![Linked List](images/figure17.png)
+
+最後
+![Linked List](images/figure18.png)
+
+實作程式碼:
+```c
+//Linled List//
+//Reverse a linked list by recursiving//
+
+#include <stdlib.h>
+#include <stdio.h>
+
+typedef struct node
+{
+    int data;
+    struct node* next;
+}Node; 
+
+Node* Insert(Node* head, int data)
+{
+    Node* temp1 = (Node*)malloc(sizeof(Node));
+    Node* temp2 = head;
+    temp1->data = data;
+    temp1->next = NULL;
+    
+    if(head == NULL)
+    {
+        head = temp1;
+    }
+    else
+    {
+        while(temp2->next != NULL)
+        {
+            temp2 = temp2->next;
+        }
+        temp2->next = temp1;
+    }
+    return head;
+}
+
+void Print(Node* p)
+{
+    if(p == NULL) return;
+    printf("%d ", p->data);
+    Print(p->next);
+}
+
+void Reverse_Print(Node* p)
+{
+    if(p == NULL) return;
+    Reverse_Print(p->next);
+    printf("%d ", p->data);
+}
+
+int main()
+{
+    Node* head = NULL;
+    head = Insert(head,2);
+    head = Insert(head,4);
+    head = Insert(head,5);
+    head = Insert(head,8); //2, 4, 5, 8
+
+    printf("Linked list is ");
+    Print(head);
+
+    printf("\nReverse linked list is ");
+    Reverse_Print(head);
+    
+    return 0;
+}
+```
