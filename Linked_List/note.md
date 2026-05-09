@@ -1,7 +1,7 @@
 # Linked List (鏈表)
 Linked List (鏈表) 是一種常見的資料結構，用來儲存一系列的元素。與陣列 (Array) 不同，Linked List 的元素稱為節點 (Node) 在記憶體中不必是連續的。每個節點除了儲存資料外，還會儲存一個指向下一個節點的參考 (指標)。
 
-![Linked List](images\linked_list.png)
+![Linked List](images/linked_list.png)
 Figure 1. Singly Linked List
 
 ## 為什麼要用 Linked List?
@@ -24,13 +24,13 @@ Figure 1. Singly Linked List
 
 將head指向新節點
 
-![Linked List](images\figure2.png)
+![Linked List](images/figure2.png)
 
 (2) head不指向NULL : 
 
 先將新節點儲存一個指向舊首節點的地址，之後斷開head和舊首節點的連接，改成指向新節點。
 
-![Linked List](images\figure3.png)
+![Linked List](images/figure3.png)
 
 實作程式碼:
 ```C
@@ -86,13 +86,13 @@ int main() {
 
 將head指向新節點
 
-![Linked List](images\figure2.png)
+![Linked List](images/figure2.png)
 
 (2) head不指向NULL : 
 
 假設要插入到第n個節點中(圖中假設要插入到3號節點)，先找到n-1的節點位置，之後將其所存的n節點位址(即圖中的250)放到新節點中，最後再將新節點的位址存到n-1節點中(250更新成150)。
 
-![Linked List](images\figure4.png)
+![Linked List](images/figure4.png)
 
 實作程式碼:
 ```c
