@@ -438,3 +438,106 @@ int main()
     return 0;
 }
 ```
+這邊使用的方法本質上是把Linked List倒著輸出內容，並不是真的反轉整個Linked List。因此，這邊提供反轉整個Linked List的遞迴方式。
+
+假設有一個Linked List:
+![Linked List](images/figure14.png)
+
+我們想用一個Reverse函式遞迴到最後一個節點，之後將head指向最後一個節點並開始回歸。
+```c
+void Reverse(Node *p)
+{
+    if(p->next == NULL)
+    {
+        head = p;
+        return;
+    }
+    Reverse(p->next);
+    p->next->next = p;
+    p->next = NULL;
+}
+```
+此時，p指向250，p->next == NULL。因此，觸發exit條件。
+![Linked List](images/figure19.png)
+
+回歸到上一個呼叫程式碼(Reverse(250);)的下行(p->next->next = p;)，此時p=150。這裡我們想完成節點反向，將後節點指向前面的節點，並將前面的節點指向NULL。
+![Linked List](images/figure20.png)
+
+最後回到main function，完成反轉。
+![Linked List](images/figure21.png)
+
+實作程式碼:
+```c
+//Linled List//
+//Reverse a linked list by recursiving//
+
+#include <stdlib.h>
+#include <stdio.h>
+
+typedef struct node
+{
+    int data;
+    struct node* next;
+}Node;
+Node* head; 
+
+void Insert(int data)
+{
+    Node* temp1 = (Node*)malloc(sizeof(Node));
+    Node* temp2 = head;
+    temp1->data = data;
+    temp1->next = NULL;
+    
+    if(temp2 == NULL)
+    {
+        head = temp1;
+        return;
+    }
+    
+    while(temp2->next != NULL)
+    {
+        temp2 = temp2->next;
+    }
+    temp2->next = temp1;
+}
+
+void Print()
+{
+    Node* temp = head;
+    while(temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+void Reverse(Node *p)
+{
+    if(p->next == NULL)
+    {
+        head = p;
+        return;
+    }
+    Reverse(p->next);
+    p->next->next = p;
+    p->next = NULL;
+}
+
+int main()
+{
+    head = NULL;
+    Insert(2);
+    Insert(4);
+    Insert(5);
+    Insert(8); //2, 4, 5, 8
+    printf("Linked list is ");
+    Print();
+    
+    Reverse(head);
+    printf("Reverse linked list is ");
+    Print();
+    
+    return 0;
+}
+```
