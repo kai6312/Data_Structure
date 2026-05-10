@@ -541,3 +541,203 @@ int main()
     return 0;
 }
 ```
+## 雙向鏈結串列(Double Link List) 
+每個節點包含兩個指針，一個指向下一個節點，一個指向前一個節點。
+![Linked List](images/figure22.png)
+
+優點: 如果我們有指向任何節點的指針，我們就可以反向查詢。僅需一個指針，我們就能查看當前、下一個、上一個節點。
+![Linked List](images/figure23.png)
+
+缺點: 需要額外的記憶體來存上一個節點的位置。此外，插入和刪除的操作也需要重設比單項鏈表多的鏈，因此更容易出錯。
+
+### 1. 在頭部插入節點
+這邊分成兩個情形處理，分別是:head指向NULL(即沒有節點)和head不指向NULL(即已經指向節點)
+
+(1) head指向NULL : 
+
+將head指向新節點
+
+![Linked List](images/figure24.png)
+
+(2) head不指向NULL : 
+
+先將舊節點儲存一個指向新首節點的地址，新首節點儲存一個指向舊節點的地址，之後斷開head和舊首節點的連接，改成指向新首節點。
+
+![Linked List](images/figure25.png)
+
+程式碼:
+```c
+void InsertAtHead(int data)
+{
+    Node *newNode = GetNewNode(data);
+    if(head == NULL)
+    {
+        head = newNode;
+        return;
+    }
+
+    head->prev = newNode;
+    newNode->next = head;
+    head = newNode;
+}
+```
+
+### 2. 在尾部插入節點
+一樣分成兩個情形處理，分別是:head指向NULL(即沒有節點)和head不指向NULL(即已經指向節點)
+
+(1) head指向NULL : 
+
+將head指向新節點
+
+(2) head不指向NULL : 
+
+先將指針指向最後一個節點，之後將最後一個節點存指向要插入尾部的節點。同時，將要插入尾部的節點存最後一個節點的位置。
+
+程式碼:
+```c
+void InsertAtTail(int data)
+{
+    Node *newNode = GetNewNode(data);
+    if(head == NULL)
+    {
+        head = newNode;
+        return;
+    }
+
+    Node* temp = head;
+    while(temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    newNode->prev = temp;
+    temp->next = newNode;
+}
+```
+### 3. 反轉輸出
+先將指針指向最後一個節點，同時輸出資料。之後，將指針往前移動到前一個節點。
+
+程式碼:
+```c
+void ReversePrint()
+{
+    Node* temp = head;
+    if(temp == NULL) return;
+
+    while(temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    printf("Reverse: ");
+    while(temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->prev;
+    }
+    printf("\n");
+}
+```
+
+三合一實作程式碼:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+    int data;
+    struct node *prev;
+    struct node *next;
+}Node;
+Node *head;
+
+Node *GetNewNode(int data)
+{
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+
+    return newNode;
+}
+
+void InsertAtHead(int data)
+{
+    Node *newNode = GetNewNode(data);
+    if(head == NULL)
+    {
+        head = newNode;
+        return;
+    }
+
+    head->prev = newNode;
+    newNode->next = head;
+    head = newNode;
+}
+
+void InsertAtTail(int data)
+{
+    Node *newNode = GetNewNode(data);
+    if(head == NULL)
+    {
+        head = newNode;
+        return;
+    }
+
+    Node* temp = head;
+    while(temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    newNode->prev = temp;
+    temp->next = newNode;
+}
+
+void Print()
+{
+    Node* temp = head;
+    printf("Forward: ");
+    while(temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+void ReversePrint()
+{
+    Node* temp = head;
+    if(temp == NULL) return;
+
+    while(temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    printf("Reverse: ");
+    while(temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->prev;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    head = NULL;
+    printf("InsertAtHead\n");
+    InsertAtHead(2); Print(); ReversePrint();
+    InsertAtHead(7); Print(); ReversePrint();
+    InsertAtHead(4); Print(); ReversePrint();
+    InsertAtHead(8); Print(); ReversePrint();//8, 4, 7, 2
+    
+    printf("\nInsertAtTail\n");
+    InsertAtTail(1); Print(); ReversePrint();
+    InsertAtTail(3); Print(); ReversePrint();
+    InsertAtTail(5); Print(); ReversePrint();
+    InsertAtTail(7); Print(); ReversePrint();//8, 4, 7, 2, 1, 3, 5, 7, 
+    return 0;
+}
+```
