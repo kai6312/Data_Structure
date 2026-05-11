@@ -140,3 +140,6 @@ int main()
     return 0;
 }
 ```
+## 使用Stack做反轉
+### 1. 反轉String
+### 1. 反轉Linked List
